@@ -11,7 +11,12 @@ function SocketRouter(io) {
             let newTransaction = await transaction.save();
             let response = new ResponseModel(1, "Create account newTransaction success!", newTransaction);
             
-            let transactions = await Transactions.find({ type: "in" });
+            let transactions = await Transactions
+            .find({ type: "in" })
+            .sort({
+                datetime: "desc",
+            });
+            
             if (transactions.length > 0) {
                 io.emit("transactions", transactions);
             }

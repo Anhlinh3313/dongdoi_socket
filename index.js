@@ -7,6 +7,7 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 const port = process.env.PORT;
 const bodyParser = require('body-parser');
+const Transactions = require("./database/entities/Transactions");
 
 app.use(cors());
 app.options('*', cors());
@@ -29,6 +30,20 @@ const io = new Server(server, {
 
 io.on("connection", async (socket) => {
   console.log("Connect: ", socket.id);
+
+  socket.on("call_transaction", async (data) => {
+    if(data){
+      let transactions = await Transactions
+      .find({ type: "in" })
+      .sort({
+          datetime: "desc",
+      });
+  
+      if (transactions.length > 0) {
+        socket.emit("transactions", transactions);
+      }
+    }
+  });
 
   socket.on("disconnect", async () => {
     console.log("disconnect: ", socket.id);
