@@ -29,11 +29,17 @@ const io = new Server(server, {
 
 io.on("connection", async (socket) => {
   console.log("Connect: ", socket.id);
+
+  socket.on("disconnect", async () => {
+    console.log("disconnect: ", socket.id);
+    socket.disconnect();
+  });
+
   console.log(io.sockets.server.engine.clientsCount);
 });
 
 const socketRouter = require('./routes/socketRouter')(io);
-app.use('/api/transaction', socketRouter);
+app.use('/api/transactionSocket', socketRouter);
 
 server.listen(port, () => {
   console.log("Server listening on port " + port);

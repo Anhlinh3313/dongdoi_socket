@@ -5,7 +5,7 @@ const ResponseModel = require("../models/ResponseModel");
 const router = express.Router();
 
 function SocketRouter(io) {
-    router.post('/createTransaction', async (req, res) => {
+    router.post('/createTransactionSocket', async (req, res) => {
         try {
             let transaction = new Transactions(req.body);
             let newTransaction = await transaction.save();
